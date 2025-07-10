@@ -1,0 +1,1 @@
+<?php // blade view is embedded inside the component ?>
