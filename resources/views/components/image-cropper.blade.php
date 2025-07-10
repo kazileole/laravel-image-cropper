@@ -39,94 +39,97 @@
     </div>
 
     @push('styles')
-        <!-- Bootstrap CSS CDN -->
+        <!-- Bootstrap CDN only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
         <!-- Internal Package CSS -->
-        <link href="{{ asset('vendor/image-cropper/cropper.css') }}" rel="stylesheet">
+        <link href="{{ asset('vendor/image-cropper/css/cropper.css') }}" rel="stylesheet">
     @endpush
 
     @push('scripts')
-        <!-- Bootstrap JS CDN -->
+        <!-- Bootstrap JS CDN only -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Internal Package JS -->
-        <script src="{{ asset('vendor/image-cropper/cropper.js') }}"></script>
+        <script src="{{ asset('vendor/image-cropper/js/cropper.js') }}"></script>
         <script>
-            let cropper;
-            const input = document.getElementById('{{ $inputId }}');
-            const modal = new bootstrap.Modal(document.getElementById('cropperModal'));
-            const image = document.getElementById('imageToCrop');
-            const preview = document.getElementById('{{ $previewId }}');
-            const hiddenInput = document.getElementById('hidden_{{ $outputName }}');
+            document.addEventListener("DOMContentLoaded", function() {
+                let cropper;
+                const input = document.getElementById('{{ $inputId }}');
+                const modal = new bootstrap.Modal(document.getElementById('cropperModal'));
+                const image = document.getElementById('imageToCrop');
+                const preview = document.getElementById('{{ $previewId }}');
+                const hiddenInput = document.getElementById('hidden_{{ $outputName }}');
 
-            input.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
 
-                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-                const maxSize = 2 * 1024 * 1024; // 2MB
+                    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+                    const maxSize = 2 * 1024 * 1024;
 
-                if (!allowedTypes.includes(file.type)) {
-                    alert('Only JPG, PNG, JPEG, WEBP images allowed.');
-                    input.value = '';
-                    return;
-                }
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Only JPG, PNG, JPEG, WEBP images allowed.');
+                        input.value = '';
+                        return;
+                    }
 
-                if (file.size > maxSize) {
-                    alert('Image must be less than 2MB.');
-                    input.value = '';
-                    return;
-                }
+                    if (file.size > maxSize) {
+                        alert('Image must be less than 2MB.');
+                        input.value = '';
+                        return;
+                    }
 
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    image.src = event.target.result;
-                    modal.show();
-                };
-                reader.readAsDataURL(file);
-            });
-
-            document.getElementById('cropperModal').addEventListener('shown.bs.modal', function() {
-                cropper = new Cropper(image, {
-                    aspectRatio: {{ $ratio }},
-                    viewMode: 1,
-                    autoCropArea: 1,
-                    responsive: true
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        image.src = event.target.result;
+                        modal.show();
+                    };
+                    reader.readAsDataURL(file);
                 });
-            });
 
-            document.getElementById('cropperModal').addEventListener('hidden.bs.modal', function() {
-                if (cropper) {
-                    cropper.destroy();
-                    cropper = null;
-                }
-                input.value = '';
-            });
+                document.getElementById('cropperModal').addEventListener('shown.bs.modal', function() {
+                    cropper = new Cropper(image, {
+                        aspectRatio: {{ $ratio }},
+                        viewMode: 1,
+                        autoCropArea: 1,
+                        responsive: true
+                    });
+                });
 
-            document.getElementById('cropBtn').addEventListener('click', function() {
-                if (cropper) {
-                    const canvas = cropper.getCroppedCanvas();
-                    const base64 = canvas.toDataURL('image/jpeg');
-                    preview.src = base64;
-                    hiddenInput.value = base64;
+                document.getElementById('cropperModal').addEventListener('hidden.bs.modal', function() {
+                    if (cropper) {
+                        cropper.destroy();
+                        cropper = null;
+                    }
+                    input.value = '';
+                });
+
+                document.getElementById('cropBtn').addEventListener('click', function() {
+                    if (cropper) {
+                        const canvas = cropper.getCroppedCanvas();
+                        const base64 = canvas.toDataURL('image/jpeg');
+                        preview.src = base64;
+                        hiddenInput.value = base64;
+                        modal.hide();
+                    }
+                });
+
+                document.getElementById('cancelBtn').addEventListener('click', function() {
+                    input.value = '';
                     modal.hide();
-                }
-            });
+                });
 
-            document.getElementById('cancelBtn').addEventListener('click', function() {
-                input.value = '';
+                document.getElementById('zoomIn').onclick = () => cropper?.zoom(0.1);
+                document.getElementById('zoomOut').onclick = () => cropper?.zoom(-0.1);
+                document.getElementById('rotateLeft').onclick = () => cropper?.rotate(-45);
+                document.getElementById('rotateRight').onclick = () => cropper?.rotate(45);
+                document.getElementById('flipHorizontal').onclick = () => {
+                    const scaleX = cropper.getData().scaleX || 1;
+                    cropper.scaleX(-scaleX);
+                };
+                document.getElementById('dragMode').onclick = () => cropper.setDragMode('move');
+                document.getElementById('resetCrop').onclick = () => cropper.reset();
             });
-
-            document.getElementById('zoomIn').onclick = () => cropper?.zoom(0.1);
-            document.getElementById('zoomOut').onclick = () => cropper?.zoom(-0.1);
-            document.getElementById('rotateLeft').onclick = () => cropper?.rotate(-45);
-            document.getElementById('rotateRight').onclick = () => cropper?.rotate(45);
-            document.getElementById('flipHorizontal').onclick = () => {
-                const scaleX = cropper.getData().scaleX || 1;
-                cropper.scaleX(-scaleX);
-            };
-            document.getElementById('dragMode').onclick = () => cropper.setDragMode('move');
-            document.getElementById('resetCrop').onclick = () => cropper.reset();
         </script>
     @endpush
 </div>

@@ -8,24 +8,26 @@ class ImageCropper extends Component
 {
     public string $inputId;
     public string $previewId;
-    public string $ratio;
     public string $outputName;
+    public float $ratio;
 
-    public function __construct(string $inputId, string $previewId, string $ratio = '816/484', string $outputName = 'cropped_image')
-    {
+    public function __construct(
+        string $inputId,
+        string $previewId,
+        string $outputName = 'cropped_image',
+        string $ratio = '816/484'
+    ) {
         $this->inputId = $inputId;
         $this->previewId = $previewId;
-        $this->ratio = $ratio;
         $this->outputName = $outputName;
+
+        // Convert ratio (e.g. 816/484) to float
+        [$w, $h] = explode('/', $ratio);
+        $this->ratio = round(floatval($w) / floatval($h), 4);
     }
 
     public function render()
     {
-        return view('image-cropper::components.image-cropper', [
-            'inputId' => $this->inputId,
-            'previewId' => $this->previewId,
-            'ratio' => $this->ratio,
-            'outputName' => $this->outputName,
-        ]);
+        return view('image-cropper::component');
     }
 }
