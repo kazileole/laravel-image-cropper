@@ -28,8 +28,8 @@ class ImageCropperServiceProvider extends ServiceProvider
 
         // Load package assets directly from package
         $this->publishes([
-            __DIR__ . '/../resources/css' => resource_path('css/vendor/image-cropper'),
-            __DIR__ . '/../resources/js' => resource_path('js/vendor/image-cropper'),
+            __DIR__ . '/../resources/assets/css' => resource_path('css/vendor/image-cropper'),
+            __DIR__ . '/../resources/assets/js' => resource_path('js/vendor/image-cropper'),
         ], 'image-cropper-resources');
 
         // Add a view namespace if needed
