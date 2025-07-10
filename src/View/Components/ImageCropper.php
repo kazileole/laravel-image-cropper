@@ -1,6 +1,6 @@
-
 <?php
-namespace MyVendor\ImageCropper\View\Components;
+
+namespace MynulLeo\ImageCropper\View\Components;
 
 use Illuminate\View\Component;
 
