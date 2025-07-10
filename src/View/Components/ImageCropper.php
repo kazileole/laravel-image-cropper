@@ -24,7 +24,7 @@ class ImageCropper extends Component
         return <<<'blade'
 <div>
     <!-- File Input -->
-    <input type="hidden" name="{{ \$outputName }}" id="hidden_{{ \$outputName }}">
+    <input type="hidden" name="{{ $outputName }}" id="hidden_{{ $outputName }}">
 
     <!-- Cropper Modal -->
     <div class="modal fade" id="cropperModal" tabindex="-1">
