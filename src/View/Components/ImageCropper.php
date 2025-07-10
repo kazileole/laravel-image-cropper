@@ -65,11 +65,11 @@ class ImageCropper extends Component
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
         <script>
             let cropper;
-            const input = document.getElementById('{{ \$inputId }}');
+            const input = document.getElementById('{{ $inputId }}');
             const modal = new bootstrap.Modal(document.getElementById('cropperModal'));
             const image = document.getElementById('imageToCrop');
-            const preview = document.getElementById('{{ \$previewId }}');
-            const hiddenInput = document.getElementById('hidden_{{ \$outputName }}');
+            const preview = document.getElementById('{{ $previewId }}');
+            const hiddenInput = document.getElementById('hidden_{{ $outputName }}');
 
             input.addEventListener('change', function (e) {
                 const file = e.target.files[0];
@@ -84,7 +84,7 @@ class ImageCropper extends Component
 
             document.getElementById('cropperModal').addEventListener('shown.bs.modal', function () {
                 cropper = new Cropper(image, {
-                    aspectRatio: {{ \$ratio }},
+                    aspectRatio: {{ $ratio }},
                     viewMode: 1,
                     autoCropArea: 1,
                     responsive: true
