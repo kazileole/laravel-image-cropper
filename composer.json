@@ -1,5 +1,5 @@
 {
-  "name": "leo/laravel-image-cropper",
+  "name": "mynulleo/laravel-image-cropper",
   "description": "A lightweight and reusable Laravel Blade component for cropping images with custom aspect ratio, rotation, zoom, and base64 output.",
   "type": "library",
   "license": "MIT",
@@ -9,13 +9,13 @@
   },
   "autoload": {
     "psr-4": {
-      "Leo\\ImageCropper\\": "src/"
+      "Mynulleo\\ImageCropper\\": "src/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "Leo\\ImageCropper\\ImageCropperServiceProvider"
+        "Mynulleo\\ImageCropper\\ImageCropperServiceProvider"
       ]
     }
   }
